@@ -1,0 +1,40 @@
+ui_print("---------------------------------------------");
+ui_print("      INSTALADOR DE CSC BRASIL (ZTO)         ");
+ui_print("        Para Samsung Galaxy S10              ");
+ui_print("---------------------------------------------");
+
+# 1. Instalação da Partição PRISM (Configs de Operadora/Vendor)
+ui_print("- Formatando partição Prism...");
+ifelse(is_mounted("/prism"), unmount("/prism"));
+format("ext4", "EMMC", "/dev/block/by-name/prism", "0", "/prism");
+
+ui_print("- Escrevendo imagem Prism ZTO...");
+# Aqui ele busca os arquivos na pasta 'images' do zip
+block_image_update("/dev/block/by-name/prism", package_extract_file("images/prism.transfer.list"), "images/prism.new.dat.br", "images/prism.patch.dat");
+
+# 2. Instalação da Partição OPTICS (Configs de Região)
+ui_print("- Formatando partição Optics...");
+ifelse(is_mounted("/optics"), unmount("/optics"));
+format("ext4", "EMMC", "/dev/block/by-name/optics", "0", "/optics");
+
+ui_print("- Escrevendo imagem Optics ZTO...");
+block_image_update("/dev/block/by-name/optics", package_extract_file("images/optics.transfer.list"), "images/optics.new.dat.br", "images/optics.patch.dat");
+
+# 3. Redimensionamento (Crucial para evitar erros de espaço)
+ui_print("- Expandindo partições para tamanho total...");
+run_program("/bin/e2fsck", "-f", "/dev/block/by-name/prism");
+run_program("/bin/resize2fs", "/dev/block/by-name/prism");
+run_program("/bin/e2fsck", "-f", "/dev/block/by-name/optics");
+run_program("/bin/resize2fs", "/dev/block/by-name/optics");
+
+# 4. Limpeza e Finalização
+ui_print("- Executando limpeza de cache...");
+package_extract_dir("scripts", "/tmp/scripts");
+set_metadata_recursive("/tmp/scripts", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0755);
+run_program("/tmp/scripts/cleanup.sh");
+
+ui_print("---------------------------------------------");
+ui_print("   Instalação ZTO Concluída com Sucesso!     ");
+ui_print("---------------------------------------------");
+show_progress(0.100000, 10);
+set_progress(1.000000);
