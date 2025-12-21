@@ -1,4 +1,4 @@
-Support for ExtremeROM Nexus v2.0 or ABOVE
+**Support for ExtremeROM Nexus v2.0 or ABOVE**
 
  - Get the zip file from release page
  - Move to phone`s internal storage
