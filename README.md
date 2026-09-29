@@ -56,6 +56,3 @@ Se você não tiver certeza sobre a compatibilidade do seu dispositivo, confira 
 - Kernel (referência): https://github.com/GoRhanHee/android_kernel_samsung_extreme
 - Autor deste repositório: @ThomyThom — https://github.com/ThomyThom
 
----
-
-Se quiser, posso também incluir exemplos de dispositivos suportados, checksums do zip, ou instruções para desfazer a alteração (restore). Diga o que prefere que eu adicione.
